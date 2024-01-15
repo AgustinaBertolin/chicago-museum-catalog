@@ -1,16 +1,18 @@
-import { Artwork } from "src/types/Artwork"
+import { Artwork } from 'src/types/Artwork';
 
-export const processArtworkDataArray = (data: any): {artworks: Artwork[], nextUrl: string, maxArtworks: number} => {
+export const processArtworkDataArray = (
+  data: any
+): { artworks: Artwork[]; nextUrl: string; maxArtworks: number } => {
+  const artworks: Artwork[] = [];
 
-  const artworks: Artwork[] = []
+  data.data.forEach((artwork: any) => {
+    artworks.push(processArtwork(artwork));
+  });
 
-  data.data.forEach((artwork: any) =>{
-    artworks.push(processArtwork(artwork))
-  })
-
-  if(data.pagination) return {artworks, nextUrl: data.pagination.next_url, maxArtworks: data.pagination.total}
-  else return {artworks, nextUrl: '', maxArtworks: 0}
-}
+  if (data.pagination)
+    return { artworks, nextUrl: data.pagination.next_url, maxArtworks: data.pagination.total };
+  else return { artworks, nextUrl: '', maxArtworks: 0 };
+};
 
 export const processArtwork = (artwork: any): Artwork => {
   let thumbnail = {
@@ -18,15 +20,15 @@ export const processArtwork = (artwork: any): Artwork => {
     height: 0,
     width: 0,
     url: null
-  }
+  };
 
-  if(artwork.thumbnail) {
-    thumbnail= {
+  if (artwork.thumbnail) {
+    thumbnail = {
       altText: artwork.thumbnail.alt_text,
       height: artwork.thumbnail.height,
       width: artwork.thumbnail.width,
       url: `https://www.artic.edu/iiif/2/${artwork.image_id}/full/250,/0/default.jpg`
-    }
+    };
   }
   return {
     artist: {
@@ -44,6 +46,6 @@ export const processArtwork = (artwork: any): Artwork => {
     techniques: artwork.technique_titles,
     styles: artwork.style_titles,
     categories: artwork.category_titles,
-    copyright: artwork.copyright_notice,
-  }
-}
+    copyright: artwork.copyright_notice
+  };
+};

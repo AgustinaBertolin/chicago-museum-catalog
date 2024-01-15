@@ -7,7 +7,7 @@ const initialState: ArtworksStateStore = {
 };
 
 export type ArtworksStateStore = {
-  artworks: Artwork[]
+  artworks: Artwork[];
 };
 
 export const artworksSlice = createSlice({
@@ -15,14 +15,12 @@ export const artworksSlice = createSlice({
   initialState,
   reducers: {
     addArtworks: (state, action) => {
-      state.artworks = state.artworks.concat(action.payload.artworks)
-    },
+      state.artworks = state.artworks.concat(action.payload.artworks);
+    }
   }
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  addArtworks,
-} = artworksSlice.actions;
+export const { addArtworks } = artworksSlice.actions;
 
 export default artworksSlice.reducer;

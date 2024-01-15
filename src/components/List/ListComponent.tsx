@@ -1,61 +1,71 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native"
-import { Artwork } from "src/types/Artwork"
-import { ArtworkListItem } from "./ListItem"
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Artwork } from 'src/types/Artwork';
+import { ArtworkListItem } from './ListItem';
+import { useCallback } from 'react';
 
 type ListProps = {
-  data: Artwork[],
-  fetchMore: () => Promise<void>,
-  hasMoreData: boolean,
-  goToArtwork: (id: string, image_id: string) => void
-}
+  data: Artwork[];
+  fetchMore: () => Promise<void>;
+  hasMoreData: boolean;
+  goToArtwork: (id: string, image_id: string, name: string) => void;
+};
 
-export const ArtworksList = ({data, fetchMore, hasMoreData, goToArtwork}: ListProps) => {
+export const ArtworksList = ({ data, fetchMore, hasMoreData, goToArtwork }: ListProps) => {
+  const renderItem = useCallback(
+    (item: Artwork) => {
+      return (
+        <View style={styles.item}>
+          <ArtworkListItem
+            image={item.thumbnail}
+            artistName={item.artist.name}
+            date={item.date}
+            title={item.name}
+            onPress={() => goToArtwork(item.id, item.image_id, item.name)}
+          />
+        </View>
+      );
+    },
+    [goToArtwork]
+  );
 
-  const renderItem = (item: Artwork) => {
-    return (
-      <View style={styles.item}>
-        <ArtworkListItem image={item.thumbnail} artistName={item.artist.name} date={item.date} title={item.name} onPress={() => goToArtwork(item.id, item.image_id)}/>
-      </View>
-    )
-  }
-
-  const onEndReached = () => {
-    if(hasMoreData) {
-      fetchMore()
+  const onEndReached = useCallback(() => {
+    if (hasMoreData) {
+      fetchMore();
     }
-  }
+  }, [fetchMore, hasMoreData]);
 
-  const renderListFooterComponent = () => {
-    if(hasMoreData) {
-      return <View style={styles.loading}>
-        <ActivityIndicator color="grey"/>
-        <Text style={styles.loadingText}>Loading more items</Text>
-      </View>
+  const renderListFooterComponent = useCallback(() => {
+    if (hasMoreData) {
+      return (
+        <View style={styles.loading}>
+          <ActivityIndicator color="grey" />
+          <Text style={styles.loadingText}>Loading more items</Text>
+        </View>
+      );
+    } else {
+      return <></>;
     }
-    else {
-      return <></>
-    }
-  }
+  }, [hasMoreData]);
 
   return (
     <View style={styles.container}>
       <FlatList
-      style={styles.list}
+        style={styles.list}
         data={data}
         numColumns={2}
-        renderItem={({item}) => renderItem(item)}
+        renderItem={({ item }) => renderItem(item)}
         onEndReached={onEndReached}
         ListFooterComponent={renderListFooterComponent}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    width: '100%',
+    width: '100%'
   },
   list: {
     maxWidth: '100%',

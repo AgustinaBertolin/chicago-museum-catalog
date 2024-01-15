@@ -15,7 +15,6 @@ import { Provider } from 'react-redux';
 import { LogBox, StatusBar } from 'react-native';
 
 const App = () => {
-
   LogBox.ignoreAllLogs();
 
   return (
@@ -23,8 +22,8 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer>
-            <StatusBar backgroundColor={"white"} barStyle={'dark-content'} />
-            <Navigation/>
+            <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+            <Navigation />
           </NavigationContainer>
         </GestureHandlerRootView>
       </PersistGate>
